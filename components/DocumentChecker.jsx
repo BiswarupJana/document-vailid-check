@@ -5,14 +5,15 @@ import cv from '@techstark/opencv-js';
 // DocumentDisplay is a React functional component that takes an 'image' prop
 // The 'image' prop is a URL or data URL of an image
 function DocumentDisplay({ image }) {
-  
  // Create a reference to the canvas element using the useRef hook
  const canvasRef = useRef(null);
  // Create a state variable 'result' to store the detected document type, and a function 'setResult' to update it
- const [result, setResult] = useState('');
+ const [result, setResult] = useState('unknown');
 
  // Use the useEffect hook to execute code when the component mounts or the 'image' prop changes
  useEffect(() => {
+  //inicjalizacja OpenCV
+  cv.onRuntimeInitialized = () => {
    // Create a new Image object
    const img = new Image();
    // Set the source of the Image object to the 'image' prop
@@ -31,6 +32,7 @@ function DocumentDisplay({ image }) {
      // Call the identifyDocumentType function with the canvas and its rendering context
      identifyDocumentType(canvas, ctx);
    };
+  };
  }, [image]);
 
  // Function to identify the document type in the input image
@@ -126,7 +128,7 @@ function DocumentDisplay({ image }) {
      {/* Render the canvas element with the ref */}
      <canvas ref={canvasRef}></canvas>
      {/* Display the detected document type */}
-     <p>{result}</p>
+     <h1>{result}</h1>
    </div>
  );
 }
