@@ -8,7 +8,7 @@ function DocumentDisplay({ image }) {
  // Create a reference to the canvas element using the useRef hook
  const canvasRef = useRef(null);
  // Create a state variable 'result' to store the detected document type, and a function 'setResult' to update it
- const [result, setResult] = useState('unknown');
+ const [result, setResult] = useState('');
 
  // Use the useEffect hook to execute code when the component mounts or the 'image' prop changes
  useEffect(() => {
