@@ -9,6 +9,8 @@ function DocumentDisplay({ image }) {
  const canvasRef = useRef(null);
  // Create a state variable 'result' to store the detected document type, and a function 'setResult' to update it
  const [result, setResult] = useState('');
+ const [matchValue, setMatchValue] = useState(0);
+ const [documentNumber, setDocumentNumber] = useState('');
 
  // Use the useEffect hook to execute code when the component mounts or the 'image' prop changes
  useEffect(() => {
@@ -41,12 +43,10 @@ function DocumentDisplay({ image }) {
    const imgElement = document.createElement('img');
    // Set the source of the img element to the data URL of the canvas
    imgElement.src = canvas.toDataURL();
-   console.log("Getting Input Image");
    // When the img element is loaded, execute the callback function
    imgElement.onload = function () {
      // Convert the img element to an OpenCV Mat object
      const src = cv.imread(imgElement);
-
      // Define the target size for resizing the input image
      const targetSize = { width: 300, height: 200 };
 
@@ -57,8 +57,9 @@ function DocumentDisplay({ image }) {
 
      // Define an array of template images and their names for document types
      const templates = [
-       { name: 'Aadhaar', src: 'templates/aadhaar_template.png' },
-       { name: 'PAN', src: 'templates/pan_template.png' },
+      //  { name: 'Aadhaar', src: 'templates/aadhaar_template.png' },
+       { name: 'PAN', src: 'templates/panfront.jpeg' },
+       { name: 'DL', src: 'templates/dlfront.jpeg' },
      ];
 
      // Initialize a variable to store the best match and its maximum correlation value
@@ -111,6 +112,7 @@ function DocumentDisplay({ image }) {
          if (completed === templates.length) {
            // Set the 'result' state with the detected document type
            setResult(`Detected Document: ${bestMatch.name}`);
+           setMatchValue(bestMatch.maxVal);
            // Delete the resizedSrc Mat object
            resizedSrc.delete();
          }
@@ -129,6 +131,7 @@ function DocumentDisplay({ image }) {
      <canvas ref={canvasRef}></canvas>
      {/* Display the detected document type */}
      <h1>{result}</h1>
+     <p>{matchValue}</p>
    </div>
  );
 }
